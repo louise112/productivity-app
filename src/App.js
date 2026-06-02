@@ -75,17 +75,24 @@ export default function App() {
   const [todoIn,setTodoIn]= useState("");
   const pRef=useRef(); const tid=todayStr();
 
-  useEffect(()=>{
-    const ld=(k,fn,def)=>window.storage.get(k).then(r=>fn(r?JSON.parse(r.value):def)).catch(()=>fn(def));
-    ld(`ck:${tid}`,setChecks,{});
-    ld("goals2",setGoals,DEF_GOALS);
-    ld("notes2",setNotes,[]);
-    ld("energy2",setEnergy,{});
-    ld("habits2",setHabits,{});
-    ld("pts2",setPts,0);
-    ld("streak2",setStreak,0);
-    ld("todos2",setTodos,[{id:1,text:"Review UI/UX notes",done:false}]);
-  },[]);
+ useEffect(() => {
+    const ld = (k, fn, def) => {
+      try {
+        const r = window.localStorage.getItem(k);
+        fn(r ? JSON.parse(r) : def);
+      } catch (e) {
+        fn(def);
+      }
+    };
+    ld(`ck:${tid}`, setChecks, {});
+    ld("goals2", setGoals, DEF_GOALS);
+    ld("notes2", setNotes, []);
+    ld("energy2", setEnergy, {});
+    ld("habits2", setHabits, {});
+    ld("pts2", setPts, 0);
+    ld("streak2", setStreak, 0);
+    ld("todos2", setTodos, [{ id: 1, text: "Review UI/UX notes", done: false }]);
+  }, []);
 
   useEffect(()=>{const t=setInterval(()=>setNow(new Date()),1000);return()=>clearInterval(t);},[]);
   useEffect(()=>{
